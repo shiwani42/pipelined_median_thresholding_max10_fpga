@@ -1,0 +1,74 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+entity Toplevel is
+   generic (
+        ARRAY_SIZE : integer := 128;-- Define the size of the array
+		  SIZE : integer:=9
+    );
+
+port(clock		: IN STD_LOGIC;
+		reset: IN std_logic;
+		rden: IN std_logic;
+		wren: IN std_logic;
+		wraddr		: out STD_LOGIC_VECTOR (15 DOWNTO 0);
+		rdaddr		: out STD_LOGIC_VECTOR (15 DOWNTO 0);
+		q		: OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
+		);
+		end entity;
+architecture struct of Toplevel is
+
+----------------------------------------Component Declaration Area---------
+
+
+Component bram IS
+	PORT
+	(
+		clock		: IN STD_LOGIC;
+		data		: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+		rdaddress		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		rden		: IN STD_LOGIC;
+		wraddress		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		wren		: IN STD_LOGIC;
+		q		: OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
+	);
+END Component;
+
+
+
+
+
+---------------------------------------------------------------------------
+
+
+--------------Signal Declarations Area---------------
+
+signal data : std_logic_vector(7 downto 0);
+-----------------------------------------------------
+
+
+
+
+
+
+
+
+begin
+
+data<="10001000";
+
+
+--------------Component Instantiation Area----------
+
+BR: bram port map(clock, data, rdaddr, rden, wraddr, wren, q);
+
+
+------------------------------------------------------
+
+
+
+
+end struct;
+
+
+

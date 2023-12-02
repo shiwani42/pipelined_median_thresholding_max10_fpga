@@ -1,0 +1,74 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity median_filter is
+     Port (clk : in STD_LOGIC;
+           rst : in STD_LOGIC;
+          pixel0 : in STD_LOGIC_VECTOR(7 downto 0);
+           pixel1 : in STD_LOGIC_VECTOR(7 downto 0);
+			  pixel2 : in STD_LOGIC_VECTOR(7 downto 0);
+			  pixel3 : in STD_LOGIC_VECTOR(7 downto 0);
+			  pixel4 : in STD_LOGIC_VECTOR(7 downto 0);
+			  pixel5 : in STD_LOGIC_VECTOR(7 downto 0);
+			  pixel6 : in STD_LOGIC_VECTOR(7 downto 0);
+			  pixel7 : in STD_LOGIC_VECTOR(7 downto 0);
+			  pixel8 : in STD_LOGIC_VECTOR(7 downto 0);
+           median_out : out STD_LOGIC_VECTOR(7 downto 0)
+    );
+end median_filter;
+
+architecture Behavioral_mf of median_filter is
+
+    type pixel_array is array (0 to 8) of STD_LOGIC_VECTOR(7 downto 0);
+    signal pixels : pixel_array;
+	 signal sorted_pixels : pixel_array;
+	 
+	 function median(v : pixel_array) return STD_LOGIC_VECTOR is
+        variable temp : pixel_array := v;
+        variable med : STD_LOGIC_VECTOR(7 downto 0);
+    begin
+        for i in 0 to 8 loop
+            for j in i+1 to 8 loop
+                if temp(i) > temp(j) then
+                    med := temp(i);
+                    temp(i) := temp(j);
+                    temp(j) := med;
+                end if;
+            end loop;
+        end loop;
+        return temp(4); -- Median is at index 4 for 9 elements
+    end median;
+
+begin
+
+    process(clk, rst)
+    begin
+        if rst = '1' then
+            for i in 0 to 8 loop
+                pixels(i) <= (others => '0');
+            end loop;
+        elsif rising_edge(clk) then
+--            -- Shift the pixels to the right
+--            for i in 8 downto 1 loop
+--                pixels(i) <= pixels(i-1);
+--            end loop;
+
+            -- Input the new pixel
+            pixels(0) <= pixel0;
+				pixels(1) <= pixel1;
+				pixels(2) <= pixel2;
+				pixels(3) <= pixel3;
+				pixels(4) <= pixel4;
+				pixels(5) <= pixel5;
+				pixels(6) <= pixel6;
+				pixels(7) <= pixel7;
+				pixels(8) <= pixel8;
+
+            -- Perform median filtering
+            median_out <= median(pixels);
+        end if;
+    end process;
+
+end Behavioral_mf;

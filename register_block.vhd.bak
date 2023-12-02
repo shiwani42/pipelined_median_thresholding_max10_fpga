@@ -1,0 +1,21 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity register_block is
+port (
+A: in std_logic_vector( 7 downto 0);
+clock: in std_logic;
+op: out std_logic_vector( 7 downto 0)
+);
+end register_block;
+
+architecture of_register_block of register_block is 
+
+component ddff is
+   port (D,E,R,P,clock: in std_logic; Q: out std_logic);
+end component ddff;
+
+
+begin
+
+gate1: ddff port map (
